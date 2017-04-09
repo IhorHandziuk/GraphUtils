@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="417.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PlanarPartitionController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="417.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Canvas fx:id="drawCanvas" height="400.0" nodeOrientation="INHERIT" onMouseClicked="#onDrawCanvasClicked" width="400.0" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
+            </Canvas>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="417.0" prefWidth="208.0" spacing="15.0">
+         <children>
+            <VBox prefHeight="15.0" prefWidth="158.0" VBox.vgrow="NEVER" />
+            <Button fx:id="generateBtn" mnemonicParsing="false" onAction="#onGenerateBtnClick" text="Generate planar partition" />
+            <Button fx:id="removePointBtn" mnemonicParsing="false" onAction="#onRemovePointBtnClicked" text="Remove point" />
+            <Button fx:id="locateBtn" mnemonicParsing="false" onAction="#onLocateBtnClick" text="Locate point" />
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
+            <VBox alignment="CENTER" prefHeight="36.0" prefWidth="196.0">
+               <children>
+                  <Label text="click on canvas to put point" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>
