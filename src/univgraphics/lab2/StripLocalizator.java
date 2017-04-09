@@ -14,11 +14,21 @@ public class StripLocalizator implements Localizator{
 
     private List<Node> graph;
     private Point pointToLocate;
-    private final int width = 400;
+    private final int leftmostX, rightmostX;
 
     public StripLocalizator(List<Node> graph, Point pointToLocate) {
         this.graph = graph;
         this.pointToLocate = pointToLocate;
+        leftmostX = graph
+                .stream()
+                .min(Comparator.comparingInt(Point::getX))
+                .orElse(graph.get(0))
+                .getX();
+        rightmostX = graph
+                .stream()
+                .max(Comparator.comparingInt(Point::getX))
+                .orElse(graph.get(0))
+                .getX();
     }
 
     public List<Edge> locate() {
@@ -45,8 +55,8 @@ public class StripLocalizator implements Localizator{
 
         Edge leftEdge = sortedEdgeList.get(edgeIndex);
         Edge rightEdge = sortedEdgeList.get(edgeIndex + 1);
-        Edge topEdge = new Edge(new Point(0, yTop), new Point(width, yTop));
-        Edge bottomEdge = new Edge(new Point(0, yBottom), new Point(width, yBottom));
+        Edge topEdge = new Edge(new Point(leftmostX, yTop), new Point(rightmostX, yTop));
+        Edge bottomEdge = new Edge(new Point(leftmostX, yBottom), new Point(rightmostX, yBottom));
 
         return Arrays.asList(leftEdge, rightEdge, topEdge, bottomEdge);
     }
@@ -99,9 +109,11 @@ public class StripLocalizator implements Localizator{
             if (pointToLocate.getY() > graph.get(end).getY()) {
                 return -1;
             }
-            if (graph.get(start).getY() <= pointToLocate.getY() && pointToLocate.getY() <= graph.get(start + 1).getY()) {
+            if (graph.get(start).getY() <= pointToLocate.getY() &&
+                   pointToLocate.getY() <= graph.get(start + 1).getY()) {
                 return start + 1;
-            } else if (graph.get(end - 1).getY() <= pointToLocate.getY() && pointToLocate.getY() <= graph.get(end).getY()) {
+            } else if (graph.get(end - 1).getY() <= pointToLocate.getY() &&
+                            pointToLocate.getY() <= graph.get(end).getY()) {
                 return end;
             }
             int mid = (end + start) / 2;
@@ -130,12 +142,15 @@ public class StripLocalizator implements Localizator{
             sets.add(new ArrayList<>());
         }
 
-        graph.sort((o1, o2) -> o1.getY() != o2.getY() ? o1.getY() - o2.getY() : o1.getX() - o2.getX());
+        graph.sort((o1, o2) ->
+                o1.getY() != o2.getY() ?
+                o1.getY() - o2.getY() :
+                o1.getX() - o2.getX());
 
         for (int i = 1; i < graph.size(); i++) {
             // horizontal line that 1 unit further that canvas bounds
-            Node left = new Node(- 1, graph.get(i - 1).getY());
-            Node right = new Node(width + 1, graph.get(i - 1).getY());
+            Node left = new Node(leftmostX - 1, graph.get(i - 1).getY());
+            Node right = new Node(rightmostX + 1, graph.get(i - 1).getY());
             Edge horizonEdge = new Edge(left, right);
             for (Edge edge : allEdges) {
                 if (Edge.intersect(horizonEdge, edge)) {
