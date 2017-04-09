@@ -1,8 +1,8 @@
-package sample;
+package univgraphics.lab2;
 
-import sample.primitives.Edge;
-import sample.primitives.Node;
-import sample.primitives.Point;
+import univgraphics.primitives.Edge;
+import univgraphics.primitives.Node;
+import univgraphics.primitives.Point;
 
 import java.util.*;
 
@@ -16,7 +16,7 @@ public class PlanarPartition {
     private int width, height;
     private List<Node> graph = new ArrayList<>();
 
-    PlanarPartition(int x0, int y0, int width, int height) {
+    public PlanarPartition(int x0, int y0, int width, int height) {
         this.x0 = x0;
         this.y0 = y0;
         this.width = width;
@@ -31,7 +31,7 @@ public class PlanarPartition {
         return new Point(x, y);
     }
 
-    void generate() {
+    public void generate() {
         graph.clear();
         int verNum = 3 + (int) (Math.random() * 5);
         for (int i = 0; i < verNum; i++) {

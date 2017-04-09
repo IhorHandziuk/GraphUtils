@@ -1,4 +1,4 @@
-package sample.primitives;
+package univgraphics.primitives;
 
 import java.util.Objects;
 
