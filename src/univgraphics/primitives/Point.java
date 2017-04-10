@@ -44,4 +44,12 @@ public class Point {
     public void setY(int y) {
         this.y = y;
     }
+
+    public static Point createRandomPoint(int x0, int y0, int width, int height) {
+        int x = x0;
+        int y = y0;
+        x += Math.random() * width;
+        y += Math.random() * height;
+        return new Point(x, y);
+    }
 }

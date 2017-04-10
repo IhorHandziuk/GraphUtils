@@ -1,4 +1,4 @@
-package univgraphics.lab2;
+package univgraphics.lab1;
 
 import univgraphics.primitives.Edge;
 import univgraphics.primitives.Localizator;
@@ -11,8 +11,8 @@ import java.util.List;
  * Created by Ihor Handziuk on 10.04.2017.
  * All code is free to use and distribute.
  */
-public class ChainLocalizator extends Localizator {
-    public ChainLocalizator(List<Node> graph, Point pointToLocate) {
+public class SimpleLocalizator extends Localizator {
+    public SimpleLocalizator(List<Node> graph, Point pointToLocate) {
         super(graph, pointToLocate);
     }
 

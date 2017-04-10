@@ -11,6 +11,10 @@ public class Node extends Point {
         super(x, y);
     }
 
+    public Node(Point p) {
+        super(p.getX(), p.getY());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

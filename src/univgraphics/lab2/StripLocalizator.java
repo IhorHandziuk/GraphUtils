@@ -1,6 +1,7 @@
 package univgraphics.lab2;
 
 import univgraphics.primitives.Edge;
+import univgraphics.primitives.Localizator;
 import univgraphics.primitives.Node;
 import univgraphics.primitives.Point;
 
@@ -10,15 +11,12 @@ import java.util.*;
  * Created by Ihor Handziuk on 09.04.2017.
  * All code is free to use and distribute.
  */
-public class StripLocalizator implements Localizator{
+public class StripLocalizator extends Localizator {
 
-    private List<Node> graph;
-    private Point pointToLocate;
     private final int leftmostX, rightmostX;
 
     public StripLocalizator(List<Node> graph, Point pointToLocate) {
-        this.graph = graph;
-        this.pointToLocate = pointToLocate;
+        super(graph, pointToLocate);
         leftmostX = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))

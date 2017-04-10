@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import univgraphics.lab2.Localizator;
+import univgraphics.primitives.Localizator;
 import univgraphics.lab2.PlanarPartition;
 import univgraphics.lab2.StripLocalizator;
 import univgraphics.primitives.Edge;

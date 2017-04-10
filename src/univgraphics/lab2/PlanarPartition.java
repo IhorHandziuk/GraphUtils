@@ -1,6 +1,7 @@
 package univgraphics.lab2;
 
 import univgraphics.primitives.Edge;
+import univgraphics.primitives.Generator;
 import univgraphics.primitives.Node;
 import univgraphics.primitives.Point;
 
@@ -10,11 +11,8 @@ import java.util.*;
  * Created by Ihor Handziuk on 01.04.2017.
  * All code is free to use and distribute.
  */
-public class PlanarPartition {
+public class PlanarPartition extends Generator{
 
-    private int x0, y0;   // left bottom corner coordinates
-    private int width, height;
-    private List<Node> graph = new ArrayList<>();
 
     public PlanarPartition(int x0, int y0, int width, int height) {
         this.x0 = x0;
@@ -23,19 +21,11 @@ public class PlanarPartition {
         this.height = height;
     }
 
-    private Point createRandomPoint() {
-        int x = x0;
-        int y = y0;
-        x += Math.random() * width;
-        y += Math.random() * height;
-        return new Point(x, y);
-    }
-
     public void generate() {
         graph.clear();
         int verNum = 3 + (int) (Math.random() * 5);
         for (int i = 0; i < verNum; i++) {
-            Point randomPoint = createRandomPoint();
+            Point randomPoint = Point.createRandomPoint(x0, y0, width, height);
             Node nextNode = new Node(randomPoint.getX(), randomPoint.getY());
             graph.add(nextNode);
         }
@@ -56,20 +46,5 @@ public class PlanarPartition {
         }
     }
 
-    private boolean intersectOther(Node fromNode, Node toNode) {
-        for (Node n : graph) {
-            for (Node adj : n.adj()) {
-                if (Edge.intersect(fromNode, toNode, n, adj)) {
-                    if (!(fromNode.equals(n) || fromNode.equals(adj)
-                         || toNode.equals(n) || toNode.equals(adj)))
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
-    public List<Node> getGraph() {
-        return graph;
-    }
 }

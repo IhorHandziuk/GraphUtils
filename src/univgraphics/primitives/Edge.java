@@ -75,4 +75,14 @@ public class Edge {
     public Point getEnd() {
         return end;
     }
+
+    public static Edge createRandomEdge(int x0, int y0, int width, int height) {
+        Point startPoint = Point.createRandomPoint(x0, y0, width, height);
+        Point endPoint = Point.createRandomPoint(x0, y0, width, height);
+        Node start = new Node(startPoint);
+        Node end = new Node(endPoint);
+        start.adj().add(end);
+        end.adj().add(start);
+        return new Edge(start, end);
+    }
 }
