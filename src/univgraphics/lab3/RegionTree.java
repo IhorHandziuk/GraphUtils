@@ -16,7 +16,7 @@ public class RegionTree {
         int xLeft, xRight; // interval [xLeft, xRight)
         TreeNode left;
         TreeNode right;
-        TreeSet<Point> points = new TreeSet<>();
+        List<Point> points = new ArrayList<>();
 
     }
 
@@ -25,7 +25,7 @@ public class RegionTree {
     private int topY, bottomY;
     private TreeNode root;
 
-    RegionTree(List<Node> graph) {
+    public RegionTree(List<Node> graph) {
         this.graph = graph;
         root = new TreeNode();
         graph.sort(Comparator.comparingInt(Point::getX));
@@ -63,7 +63,7 @@ public class RegionTree {
                 search(parent.right, list);
             }
         } else {
-            Point point = parent.points.first();
+            Point point = parent.points.get(0);
             if (point.getX() > leftX &&
                 point.getX() < rightX &&
                 point.getY() > bottomY &&
@@ -86,8 +86,8 @@ public class RegionTree {
                    .skip(parent.points.size() / 2)
                    .collect(Collectors.toList()));
            parent.left.xLeft = parent.xLeft;
-           parent.left.xRight = parent.left.points.last().getX();
-           parent.right.xLeft = parent.right.points.first().getX();
+           parent.left.xRight = parent.left.points.get(parent.left.points.size() - 1).getX();
+           parent.right.xLeft = parent.right.points.get(0).getX();
            parent.right.xRight = parent.xRight;
            buildTree(parent.left);
            buildTree(parent.right);

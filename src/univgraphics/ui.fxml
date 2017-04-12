@@ -14,7 +14,7 @@
    <children>
       <VBox alignment="CENTER" prefHeight="417.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
          <children>
-            <Canvas fx:id="drawCanvas" height="400.0" nodeOrientation="INHERIT" onMouseClicked="#onDrawCanvasClicked" width="400.0" HBox.hgrow="ALWAYS">
+            <Canvas fx:id="drawCanvas" height="400.0" nodeOrientation="INHERIT" onMouseClicked="#onDrawCanvasClicked" onMousePressed="#onDrawCanvasPressed" onMouseReleased="#onDrawCanvasReleased" width="400.0" HBox.hgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="CROSSHAIR" />
                </cursor>
@@ -25,11 +25,10 @@
          <children>
             <VBox prefHeight="15.0" prefWidth="158.0" VBox.vgrow="NEVER" />
             <Button fx:id="generateSimplePolygonBtn" mnemonicParsing="false" onAction="#onGenerateSimplePolygonBtnClicked" text="Generate simple polygon" />
-            <Button fx:id="locateSimpleBtn" mnemonicParsing="false" onAction="#onLocateSimpleBtnClicked" text="Locate point (simple polygon)" />
             <Button fx:id="generatePlanarPartitionBtn" mnemonicParsing="false" onAction="#onGeneratePlanarPartitionBtnClicked" text="Generate planar partition" />
+            <Button fx:id="locateSimpleBtn" mnemonicParsing="false" onAction="#onLocateSimpleBtnClicked" text="Locate point (simple polygon)" />
             <Button fx:id="locateStripBtn" mnemonicParsing="false" onAction="#onLocateStripBtnClicked" text="Locate point (strip method)" />
             <Button fx:id="locateChainBtn" mnemonicParsing="false" onAction="#onLocateChainBtnClicked" text="Locate point (chain method)" />
-            <Button fx:id="removePointBtn" mnemonicParsing="false" onAction="#onRemovePointBtnClicked" text="Remove point" />
             <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
             <VBox alignment="CENTER" prefHeight="36.0" prefWidth="196.0">
                <children>
