@@ -156,7 +156,9 @@ public class Controller {
 
     private void locate(Localizator localizator) {
         if (graph != null && pointToLocate != null) {
-
+            gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+            drawGraph();
+            gc.fillOval(pointToLocate.getX() - pointR / 2, pointToLocate.getY() - pointR / 2, pointR, pointR);
             List<Edge> bounds = localizator.locate();
             drawRegion(bounds);
             if (bounds != null && localizator.getClass() == StripLocalizator.class) {
@@ -208,8 +210,6 @@ public class Controller {
             }
         }
         gc.fillPolygon(polygonX, polygonY, counter);
-
         gc.setFill(Color.BLACK);
-        gc.fillOval(pointToLocate.getX() - pointR / 2, pointToLocate.getY() - pointR / 2, pointR, pointR);
     }
 }
