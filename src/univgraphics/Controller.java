@@ -9,19 +9,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import univgraphics.primitives.Localizator;
-import univgraphics.lab2.PlanarPartition;
+import univgraphics.lab1.SimpleGenerator;
+import univgraphics.lab1.SimpleLocalizator;
+import univgraphics.lab2.ChainLocalizator;
+import univgraphics.lab2.PlanarGenerator;
+import univgraphics.primitives.*;
 import univgraphics.lab2.StripLocalizator;
-import univgraphics.primitives.Edge;
-import univgraphics.primitives.Node;
-import univgraphics.primitives.Point;
 
 import java.util.*;
 
 public class Controller {
 
     @FXML
-    private Button locateBtn;
+    private Button locateSimpleBtn;
+
+    @FXML
+    private Button locateChainBtn;
+
+    @FXML
+    private Button locateStripBtn;
 
     @FXML
     private Button removePointBtn;
@@ -30,18 +36,20 @@ public class Controller {
     private Canvas drawCanvas;
 
     @FXML
-    private Button generateBtn;
+    private Button generatePlanarPartitionBtn;
 
-    private PlanarPartition planarPartition;
+    @FXML
+    private Button generateSimplePolygonBtn;
+
+    private Generator generator;
     private GraphicsContext gc;
     private List<Node> graph;
     private Point pointToLocate;
     private static final int pointR = 6;
+    private boolean graphIsSimplePolygon = false;
 
     @FXML
     public void initialize() {
-        planarPartition = new PlanarPartition(0, 0,
-                (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
         gc = drawCanvas.getGraphicsContext2D();
         drawCanvas.setScaleY(-1); // flip y axis
     }
@@ -56,12 +64,27 @@ public class Controller {
     }
 
     @FXML
-    void onGenerateBtnClick(ActionEvent event) {
+    void onGeneratePlanarPartitionBtnClicked(ActionEvent event) {
+        generator = new PlanarGenerator(0, 0,
+                (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+        generate();
+        graphIsSimplePolygon = false;
+    }
+
+    @FXML
+    void onGenerateSimplePolygonBtnClicked(ActionEvent event) {
+        generator = new SimpleGenerator(0, 0,
+                (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+        generate();
+        graphIsSimplePolygon = true;
+    }
+
+    private void generate() {
         gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
         pointToLocate = null;
-        planarPartition.generate();
+        generator.generate();
 
-        graph = planarPartition.getGraph();
+        graph = generator.getGraph();
         drawGraph();
     }
 
@@ -77,11 +100,40 @@ public class Controller {
     }
 
     @FXML
-    void onLocateBtnClick(ActionEvent event) {
+    void onLocateChainBtnClicked(ActionEvent event) {
+        locate(new ChainLocalizator(graph, pointToLocate));
+    }
+
+    @FXML
+    void onLocateStripBtnClicked(ActionEvent event) {
+        locate(new StripLocalizator(graph, pointToLocate));
+    }
+
+    @FXML
+    void onLocateSimpleBtnClicked(ActionEvent event) {
+        if (graphIsSimplePolygon) {
+            locate(new SimpleLocalizator(graph, pointToLocate));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    "Graph is not simple polygon",
+                    ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    private void locate(Localizator localizator) {
         if (graph != null && pointToLocate != null) {
-            Localizator localizator = new StripLocalizator(graph, pointToLocate);
+
             List<Edge> bounds = localizator.locate();
             drawRegion(bounds);
+            if (bounds != null && localizator.getClass() == StripLocalizator.class) {
+                Edge topEdge = bounds.get(1);
+                Edge bottomEdge = bounds.get(3);
+                gc.setStroke(Color.RED);
+                drawEdge(topEdge);
+                drawEdge(bottomEdge);
+                gc.setStroke(Color.BLACK);
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     "Partition is not created or there is no point to locate",
@@ -105,27 +157,17 @@ public class Controller {
 
     private void drawRegion(List<Edge> bounds) {
         if (bounds == null) return;
-        Edge leftEdge = bounds.get(0);
-        Edge rightEdge = bounds.get(1);
-        Edge topEdge = bounds.get(2);
-        Edge bottomEdge = bounds.get(3);
+        List<Point> polygon = new ArrayList<>();
+        for (int i = 0; i < bounds.size() - 1; i++) {
+            polygon.add(Edge.getIntersectionPoint(bounds.get(i), bounds.get(i + 1)));
+        }
+        polygon.add(Edge.getIntersectionPoint(bounds.get(0), bounds.get(bounds.size() - 1)));
 
-        Point[] trapeze = new Point[4];
-        trapeze[0] = Edge.getIntersectionPointHorizon(leftEdge, topEdge);
-        trapeze[1] = Edge.getIntersectionPointHorizon(rightEdge, topEdge);
-        trapeze[3] = Edge.getIntersectionPointHorizon(leftEdge, bottomEdge);
-        trapeze[2] = Edge.getIntersectionPointHorizon(rightEdge, bottomEdge);
-
-        gc.setStroke(Color.RED);
-        drawEdge(topEdge);
-        drawEdge(bottomEdge);
-        gc.setStroke(Color.BLACK);
-
-        double[] polygonX = new double[4];
-        double[] polygonY = new double[4];
+        double[] polygonX = new double[polygon.size()];
+        double[] polygonY = new double[polygon.size()];
         int counter = 0;
         gc.setFill(Color.rgb(255, 0, 0, 0.5));
-        for (Point p : trapeze) {
+        for (Point p : polygon) {
             if (p != null) {
                 polygonX[counter] = p.getX();
                 polygonY[counter] = p.getY();

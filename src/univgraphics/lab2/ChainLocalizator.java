@@ -18,6 +18,7 @@ public class ChainLocalizator extends Localizator {
 
     @Override
     public List<Edge> locate() {
-        return null;
+        Localizator localizator = new StripLocalizator(graph, pointToLocate);
+        return localizator.locate();
     }
 }

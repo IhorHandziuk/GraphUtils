@@ -52,11 +52,11 @@ public class StripLocalizator extends Localizator {
         if (edgeIndex == -1) return null;
 
         Edge leftEdge = sortedEdgeList.get(edgeIndex);
-        Edge rightEdge = sortedEdgeList.get(edgeIndex + 1);
         Edge topEdge = new Edge(new Point(leftmostX, yTop), new Point(rightmostX, yTop));
+        Edge rightEdge = sortedEdgeList.get(edgeIndex + 1);
         Edge bottomEdge = new Edge(new Point(leftmostX, yBottom), new Point(rightmostX, yBottom));
 
-        return Arrays.asList(leftEdge, rightEdge, topEdge, bottomEdge);
+        return Arrays.asList(leftEdge, topEdge, rightEdge, bottomEdge);
     }
 
     /*
@@ -151,7 +151,7 @@ public class StripLocalizator extends Localizator {
             Node right = new Node(rightmostX + 1, graph.get(i - 1).getY());
             Edge horizonEdge = new Edge(left, right);
             for (Edge edge : allEdges) {
-                if (Edge.intersect(horizonEdge, edge)) {
+                if (Edge.intersects(horizonEdge, edge)) {
                     sets.get(i).add(edge);
                 }
             }

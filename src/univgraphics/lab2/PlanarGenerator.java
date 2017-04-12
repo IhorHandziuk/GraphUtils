@@ -11,14 +11,11 @@ import java.util.*;
  * Created by Ihor Handziuk on 01.04.2017.
  * All code is free to use and distribute.
  */
-public class PlanarPartition extends Generator{
+public class PlanarGenerator extends Generator{
 
 
-    public PlanarPartition(int x0, int y0, int width, int height) {
-        this.x0 = x0;
-        this.y0 = y0;
-        this.width = width;
-        this.height = height;
+    public PlanarGenerator(int x0, int y0, int width, int height) {
+        super(x0, y0, width, height);
     }
 
     public void generate() {
@@ -45,6 +42,4 @@ public class PlanarPartition extends Generator{
             }
         }
     }
-
-
 }

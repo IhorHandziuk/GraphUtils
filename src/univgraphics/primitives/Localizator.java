@@ -10,6 +10,7 @@ public abstract class Localizator {
     protected List<Node> graph;
     protected Point pointToLocate;
 
+    // should return bounding edges in order of circumvent
     public abstract List<Edge> locate();
 
     public Localizator(List<Node> graph, Point pointToLocate) {

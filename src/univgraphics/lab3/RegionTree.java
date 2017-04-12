@@ -3,17 +3,94 @@ package univgraphics.lab3;
 import univgraphics.primitives.Node;
 import univgraphics.primitives.Point;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Ihor Handziuk on 10.04.2017.
  * All code is free to use and distribute.
  */
 public class RegionTree {
-    RegionTree(List<Node> graph, Point startCorner, Point endCorner) {
+
+    private static class TreeNode {
+        int xLeft, xRight; // interval [xLeft, xRight)
+        TreeNode left;
+        TreeNode right;
+        TreeSet<Point> points = new TreeSet<>();
 
     }
-    List<Node> getPoints() {
-        return null;
+
+    private List<Node> graph;
+    private int leftX, rightX;
+    private int topY, bottomY;
+    private TreeNode root;
+
+    RegionTree(List<Node> graph) {
+        this.graph = graph;
+        root = new TreeNode();
+        graph.sort(Comparator.comparingInt(Point::getX));
+        root.points.addAll(graph);
+        root.xLeft = graph
+                .stream()
+                .min(Comparator.comparingInt(Point::getX))
+                .orElse(graph.get(0))
+                .getX();
+        root.xRight = graph
+                .stream()
+                .max(Comparator.comparingInt(Point::getX))
+                .orElse(graph.get(0))
+                .getX() + 1;  // + 1 for maintaining the rule [xLeft, xRight)
+        buildTree(root);
+    }
+
+    public List<Point> getPoints(Point startCorner, Point endCorner) {
+        leftX = Math.min(startCorner.getX(), endCorner.getX());
+        rightX = Math.max(startCorner.getX(), endCorner.getX());
+        topY = Math.max(startCorner.getY(), endCorner.getY());
+        bottomY = Math.min(startCorner.getY(), endCorner.getY());
+
+        List<Point> res = new ArrayList<>();
+        search(root, res);
+        return res;
+    }
+
+    private void search(TreeNode parent, List<Point> list) {
+        if (parent.points.size() > 1) {
+            if (leftX <= parent.left.xRight) {
+                search(parent.left, list);
+            }
+            if (rightX >= parent.right.xLeft) {
+                search(parent.right, list);
+            }
+        } else {
+            Point point = parent.points.first();
+            if (point.getX() > leftX &&
+                point.getX() < rightX &&
+                point.getY() > bottomY &&
+                point.getY() < topY) {
+                list.add(point);
+            }
+        }
+    }
+
+    private void buildTree(TreeNode parent) {
+       if (parent.points.size() > 1) {
+           parent.left = new TreeNode();
+           parent.right = new TreeNode();
+           parent.left.points.addAll(parent.points
+                   .stream()
+                   .limit(parent.points.size() / 2)
+                   .collect(Collectors.toList()));
+           parent.right.points.addAll(parent.points
+                   .stream()
+                   .skip(parent.points.size() / 2)
+                   .collect(Collectors.toList()));
+           parent.left.xLeft = parent.xLeft;
+           parent.left.xRight = parent.left.points.last().getX();
+           parent.right.xLeft = parent.right.points.first().getX();
+           parent.right.xRight = parent.xRight;
+           buildTree(parent.left);
+           buildTree(parent.right);
+       }
     }
 }

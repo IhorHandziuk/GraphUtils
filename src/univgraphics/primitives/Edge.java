@@ -14,13 +14,13 @@ public class Edge {
         return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
     }
 
-    // Return true if line segments AB and CD intersect
-    public static boolean intersect(Point a, Point b, Point c, Point d) {
+    // Return true if line segments AB and CD intersects
+    public static boolean intersects(Point a, Point b, Point c, Point d) {
         return orientation(a, c, d) != orientation(b, c, d) &&
                 orientation(a, b, c) != orientation(a, b, d);
     }
 
-    public static boolean intersect(Edge e1, Edge e2) {
+    public static boolean intersects(Edge e1, Edge e2) {
            return orientation(e1.start, e2.start, e2.end) != orientation(e1.end, e2.start, e2.end) &&
                    orientation(e1.start, e1.end, e2.start) != orientation(e1.start, e1.end, e2.end);
     }
@@ -38,6 +38,16 @@ public class Edge {
                 x = (y - e1.start.y) * (e1.end.x - e1.start.x) / (e1.end.y - e1.start.y) + e1.start.x;
             } else return null;
             return new Point((int) x, (int) y);
+    }
+
+    public static Point getIntersectionPoint(Edge e1, Edge e2) {
+        // yeah, I know, it's ugly, on paper it looks much prettier
+        float x = ((float) e1.start.x * (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x)
+                - (float) e2.start.x * (e2.end.y - e2.start.y) / (e2.end.x - e2.start.x)
+                - e1.start.y + e2.start.y) / ((float) (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x)
+                - (float)(e2.end.y - e2.start.y) / (e2.end.x - e2.start.x));
+        float y = (x - e1.start.x) * (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x) + e1.start.y;
+        return new Point((int) x, (int) y);
     }
 
     public int substitutionX(Point p) {
@@ -68,14 +78,6 @@ public class Edge {
         return Objects.hash(start, end) ^ Objects.hash(end, start);
     }
 
-    public Point getStart() {
-        return start;
-    }
-
-    public Point getEnd() {
-        return end;
-    }
-
     public static Edge createRandomEdge(int x0, int y0, int width, int height) {
         Point startPoint = Point.createRandomPoint(x0, y0, width, height);
         Point endPoint = Point.createRandomPoint(x0, y0, width, height);
@@ -84,5 +86,25 @@ public class Edge {
         start.adj().add(end);
         end.adj().add(start);
         return new Edge(start, end);
+    }
+
+    public Point getStart() {
+        return start;
+    }
+
+    public Point getEnd() {
+        return end;
+    }
+
+    public Node getStartNode() {
+        if (start.getClass() == Node.class) {
+            return (Node)start;
+        } else return null;
+    }
+
+    public Node getEndNode() {
+        if (end.getClass() == Node.class) {
+            return (Node)end;
+        } else return null;
     }
 }
