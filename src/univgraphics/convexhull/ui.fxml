@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="417.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univgraphics.convexhull.HullController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="417.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Canvas fx:id="drawCanvas" height="400.0" nodeOrientation="INHERIT" width="400.0" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
+            </Canvas>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="417.0" prefWidth="208.0" spacing="15.0">
+         <children>
+            <VBox prefHeight="15.0" prefWidth="158.0" VBox.vgrow="NEVER" />
+            <Button fx:id="generatePointsBtn" mnemonicParsing="false" onAction="#onGeneratePointsBtnClicked" text="Generate points" />
+            <Button fx:id="quickHullBtn" mnemonicParsing="false" onAction="#onQuickHullBtnClicked" text="QuickHull" />
+            <Button fx:id="divideAndConquerBtn" mnemonicParsing="false" onAction="#onDivideAndConquerBtnClicked" text="Divide and conquer" />
+            <Button fx:id="preparataBtn" mnemonicParsing="false" onAction="#onPreparataBtnClicked" text="Preparata" />
+            <Button fx:id="generateSimplePolygonBtn" mnemonicParsing="false" onAction="#onGenerateSimplePolygonBtnClicked" text="Generate simple polygon" />
+            <Button fx:id="simplePolygonHullBtn" mnemonicParsing="false" onAction="#onSimplePolygonHullBtnClicked" text="Simple polygon hull" />
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </children>
+</HBox>

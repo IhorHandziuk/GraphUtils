@@ -1,8 +1,7 @@
-package univgraphics.lab1;
+package univgraphics.common.generators;
 
-import univgraphics.primitives.Edge;
-import univgraphics.primitives.Generator;
-import univgraphics.primitives.Node;
+import univgraphics.common.primitives.Edge;
+import univgraphics.common.primitives.Node;
 
 /**
  * Created by Ihor Handziuk on 10.04.2017.
@@ -14,6 +13,7 @@ public class SimpleGenerator extends Generator{
         super(x0, y0, width, height);
     }
 
+    @Override
     public void generate() {
         graph.clear();
         int edgeNum = 3 + (int) (Math.random() * 5);

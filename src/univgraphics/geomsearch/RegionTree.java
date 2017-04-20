@@ -1,7 +1,7 @@
-package univgraphics.lab3;
+package univgraphics.geomsearch;
 
-import univgraphics.primitives.Node;
-import univgraphics.primitives.Point;
+import univgraphics.common.primitives.Node;
+import univgraphics.common.primitives.Point;
 
 import java.util.*;
 import java.util.stream.Collectors;

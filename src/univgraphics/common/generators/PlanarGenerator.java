@@ -1,11 +1,7 @@
-package univgraphics.lab2;
+package univgraphics.common.generators;
 
-import univgraphics.primitives.Edge;
-import univgraphics.primitives.Generator;
-import univgraphics.primitives.Node;
-import univgraphics.primitives.Point;
-
-import java.util.*;
+import univgraphics.common.primitives.Node;
+import univgraphics.common.primitives.Point;
 
 /**
  * Created by Ihor Handziuk on 01.04.2017.
@@ -18,6 +14,7 @@ public class PlanarGenerator extends Generator{
         super(x0, y0, width, height);
     }
 
+    @Override
     public void generate() {
         graph.clear();
         int verNum = 3 + (int) (Math.random() * 5);
