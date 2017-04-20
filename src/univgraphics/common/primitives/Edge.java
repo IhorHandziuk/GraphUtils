@@ -1,4 +1,4 @@
-package univgraphics.primitives;
+package univgraphics.common.primitives;
 
 import java.util.Objects;
 
@@ -25,29 +25,41 @@ public class Edge {
                    orientation(e1.start, e1.end, e2.start) != orientation(e1.start, e1.end, e2.end);
     }
 
-    /* returns intersection point of 2 lines represented by 2 segments
-     * exactly 1 line should be horizontal
-     */
-    public static Point getIntersectionPointHorizon(Edge e1, Edge e2) {
-            float x, y;
-            if (e1.start.y == e1.end.y) {
-                y = e1.start.y;
-                x = (y - e2.start.y) * (e2.end.x - e2.start.x) / (e2.end.y - e2.start.y) + e2.start.x;
-            } else if (e2.start.y == e2.end.y){
-                y = e2.start.y;
-                x = (y - e1.start.y) * (e1.end.x - e1.start.x) / (e1.end.y - e1.start.y) + e1.start.x;
-            } else return null;
-            return new Point((int) x, (int) y);
+    public static Point getIntersectionPoint(Edge e1, Edge e2) {
+        float x, y;
+        if (e1.start.y == e1.end.y) {
+            y = e1.start.y;
+            x = e2.valueInY(y);
+        } else if (e2.start.y == e2.end.y){
+            y = e2.start.y;
+            x = e1.valueInY(y);
+        } else if (e1.start.x == e1.end.x) {
+            x = e1.start.x;
+            y = e2.valueInX(x);
+        } else if (e2.start.x == e2.end.x) {
+            x = e2.start.x;
+            y = e1.valueInX(x);
+        } else {
+            float denominator = (e1.start.x - e1.end.x) * (e2.start.y - e2.end.y)
+                    - (e1.start.y - e1.end.y) * (e2.start.x - e2.end.x);
+            if (denominator == 0) return null; // lines are parallel
+            float xNumerator = (e1.start.x * e1.end.y - e1.start.y * e1.end.x) * (e2.start.x - e2.end.x)
+                    - (e1.start.x - e1.end.x) * (e2.start.x * e2.end.y - e2.start.y * e2.end.x);
+            float yNumerator = (e1.start.x * e1.end.y - e1.start.y * e1.end.x) * (e2.start.y - e2.end.y)
+                    - (e1.start.y - e1.end.y) * (e2.start.x * e2.end.y - e2.start.y * e2.end.x);
+            x = xNumerator / denominator;
+            y = yNumerator / denominator;
+        }
+        return new Point((int) x, (int) y);
     }
 
-    public static Point getIntersectionPoint(Edge e1, Edge e2) {
-        // yeah, I know, it's ugly, on paper it looks much prettier
-        float x = ((float) e1.start.x * (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x)
-                - (float) e2.start.x * (e2.end.y - e2.start.y) / (e2.end.x - e2.start.x)
-                - e1.start.y + e2.start.y) / ((float) (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x)
-                - (float)(e2.end.y - e2.start.y) / (e2.end.x - e2.start.x));
-        float y = (x - e1.start.x) * (e1.end.y - e1.start.y) / (e1.end.x - e1.start.x) + e1.start.y;
-        return new Point((int) x, (int) y);
+    private double calcCrossProduct(Point point) {
+        return (end.x - start.x) * (point.getY() - start.y)
+                - (end.y - start.y) * (point.getX() - start.x);
+    }
+
+    public boolean pointIsOnRightSide(Point point) {
+        return calcCrossProduct(point) < 0;
     }
 
     public int substitutionX(Point p) {
@@ -55,12 +67,15 @@ public class Edge {
         return (int)((p.x - positionX));
     }
 
-    public float valueInX(int x) {
-        return (1.f * (x - start.x) / (end.x - start.x)) * (end.y - start.y) + start.y;
+    public float valueInX(float x) { return (x - start.x) * (end.y - start.y) / (end.x - start.x)  + start.y; }
+
+    public float valueInY(float y) {
+        return (y - start.y) * (end.x - start.x) / (end.y - start.y) + start.x;
     }
 
-    public float valueInY(int y) {
-        return (1.f * (y - start.y) / (end.y - start.y)) * (end.x - start.x) + start.x;
+    public double distance(Point p) {
+        return Math.abs((end.y - start.y) * p.getX() - (end.x - start.x) * p.getY() + end.x * start.y - end.y * start.x)
+                / Math.sqrt(Math.pow(end.y - start.y, 2) + Math.pow(end.x - start.x, 2));
     }
 
     @Override

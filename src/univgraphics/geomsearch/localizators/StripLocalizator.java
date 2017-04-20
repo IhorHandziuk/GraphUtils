@@ -1,9 +1,9 @@
-package univgraphics.lab2;
+package univgraphics.geomsearch.localizators;
 
-import univgraphics.primitives.Edge;
-import univgraphics.primitives.Localizator;
-import univgraphics.primitives.Node;
-import univgraphics.primitives.Point;
+import univgraphics.common.*;
+import univgraphics.common.primitives.Edge;
+import univgraphics.common.primitives.Node;
+import univgraphics.common.primitives.Point;
 
 import java.util.*;
 
@@ -29,7 +29,8 @@ public class StripLocalizator extends Localizator {
                 .getX();
     }
 
-    public List<Edge> locate() {
+    @Override
+    public List<Point> getRegion() {
         List<List<Edge>> sets = computeSetsOfEdges();
         int stripIndex = getStripIndex();
         if (stripIndex < 1) return null;
@@ -56,7 +57,7 @@ public class StripLocalizator extends Localizator {
         Edge rightEdge = sortedEdgeList.get(edgeIndex + 1);
         Edge bottomEdge = new Edge(new Point(leftmostX, yBottom), new Point(rightmostX, yBottom));
 
-        return Arrays.asList(leftEdge, topEdge, rightEdge, bottomEdge);
+        return Huller.edgesToPoints(Arrays.asList(leftEdge, topEdge, rightEdge, bottomEdge));
     }
 
     /*

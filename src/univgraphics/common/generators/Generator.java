@@ -1,4 +1,7 @@
-package univgraphics.primitives;
+package univgraphics.common.generators;
+
+import univgraphics.common.primitives.Edge;
+import univgraphics.common.primitives.Node;
 
 import java.util.ArrayList;
 import java.util.List;

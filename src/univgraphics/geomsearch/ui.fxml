@@ -10,7 +10,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="417.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univgraphics.Controller">
+<HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="417.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univgraphics.geomsearch.SearchController">
    <children>
       <VBox alignment="CENTER" prefHeight="417.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
          <children>

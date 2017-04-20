@@ -1,4 +1,4 @@
-package univgraphics.primitives;
+package univgraphics.common.primitives;
 
 import java.util.HashSet;
 import java.util.Objects;

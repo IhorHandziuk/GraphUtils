@@ -1,9 +1,9 @@
-package univgraphics.lab1;
+package univgraphics.geomsearch.localizators;
 
-import univgraphics.primitives.Edge;
-import univgraphics.primitives.Localizator;
-import univgraphics.primitives.Node;
-import univgraphics.primitives.Point;
+import univgraphics.common.*;
+import univgraphics.common.primitives.Edge;
+import univgraphics.common.primitives.Node;
+import univgraphics.common.primitives.Point;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class SimpleLocalizator extends Localizator {
     }
 
     @Override
-    public List<Edge> locate() {
+    public List<Point> getRegion() {
         if (graph.size() < 3) return null;
 
         List<Edge> edges = new ArrayList<>();
@@ -63,6 +63,6 @@ public class SimpleLocalizator extends Localizator {
         if (counter % 2 == 0) {
             return null;
         }
-        return edges;
+        return Huller.edgesToPoints(edges);
     }
 }
