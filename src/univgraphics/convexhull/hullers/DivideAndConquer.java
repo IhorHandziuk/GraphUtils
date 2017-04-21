@@ -41,17 +41,29 @@ public class DivideAndConquer extends Huller {
         }
         List<Point> firstHull = divideAndConquer(firstHalf);
         List<Point> secondHull = divideAndConquer(secondHalf);
-        return uniteConvexHulls(firstHull, secondHull);
+        List<Node> convertedFirst = new ArrayList<>();
+        List<Node> convertedSecond = new ArrayList<>();
+        for (Point p : firstHull) {
+            convertedFirst.add((Node) p);
+        }
+        for (Point p : secondHull) {
+            convertedSecond.add((Node) p);
+        }
+        return uniteConvexHulls(convertedFirst, convertedSecond);
     }
 
-    private static List<Point> uniteConvexHulls(List<Point> first, List<Point> second) {
+    private static List<Point> uniteConvexHulls(List<Node> first, List<Node> second) {
         int innerPointX = (first.get(0).getX() + first.get(1).getX() + first.get(2).getX()) / 3;
         int innerPointY = (first.get(0).getY() + first.get(1).getY() + first.get(2).getY()) / 3;
         Point innerPoint = new Point(innerPointX, innerPointY);
-       // Localizator simpleLocalizator = new SimpleLocalizator()
-        if (/*inside*/ true) {
+        Localizator simpleLocalizator = new SimpleLocalizator(first, innerPoint);
+        if (simpleLocalizator.getRegion() == null) {
+            // find points u and v
+            // delete chain (u, v)
 
         }
+        // ordered list of points union first and seconf
+        // return Graham(unitedList)
         return null;
     }
 }

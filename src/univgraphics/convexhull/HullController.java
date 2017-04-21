@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import univgraphics.common.GraphController;
 import univgraphics.common.generators.PointGenerator;
 import univgraphics.convexhull.hullers.DivideAndConquer;
+import univgraphics.convexhull.hullers.Graham;
 import univgraphics.convexhull.hullers.QuickHull;
 import univgraphics.convexhull.hullers.SimplePolygonHull;
 import univgraphics.common.generators.SimpleGenerator;
@@ -89,6 +90,7 @@ public class HullController extends GraphController{
 
     @FXML
     void onPreparataBtnClicked(ActionEvent event) {
-
+        drawRegion((new Graham(graph)).getRegion());
+        hullIsDone = true;
     }
 }

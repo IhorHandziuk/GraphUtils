@@ -31,7 +31,7 @@ public class Graham extends Huller {
         Point nextToPeek = graph.get(0);
         convexHull.push(nextToPeek);
         convexHull.push(graph.get(1));
-        for (int i = 0; i < graph.size(); i++) {
+        for (int i = 2; i < graph.size(); i++) {
             while (!(new Edge(nextToPeek, graph.get(i)).pointIsOnRightSide(convexHull.peek()))) {
                 convexHull.pop();
                 nextToPeek = convexHull.get(convexHull.size() - 2);
@@ -43,7 +43,7 @@ public class Graham extends Huller {
         return res;
     }
 
-    private float polarAngle(Point from, Point to) {
-        return 0;
+    private double polarAngle(Point from, Point to) {
+        return Math.atan2(to.getY() - from.getY(), to.getX() - from.getX());
     }
 }
