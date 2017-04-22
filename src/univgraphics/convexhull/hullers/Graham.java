@@ -25,7 +25,7 @@ public class Graham extends Huller {
         Node lowestNode = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getY))
-                .orElse(null);
+                .get();
         graph.sort((o1, o2) -> {
             if (o1.equals(lowestNode)) return Integer.MIN_VALUE;
             if (o2.equals(lowestNode)) return Integer.MAX_VALUE;
@@ -37,7 +37,7 @@ public class Graham extends Huller {
         convexHull.push(nextToPeek);
         convexHull.push(graph.get(1));
         for (int i = 2; i < graph.size(); i++) {
-            while (!(new Edge(nextToPeek, graph.get(i)).pointIsOnRightSide(convexHull.peek()))) {
+            while (new Edge(graph.get(i), nextToPeek).pointIsOnRightSide(convexHull.peek())) {
                 convexHull.pop();
                 nextToPeek = convexHull.get(convexHull.size() - 2);
             }

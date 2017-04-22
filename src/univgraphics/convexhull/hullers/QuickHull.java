@@ -24,11 +24,11 @@ public class QuickHull extends Huller {
         Node leftmostNode = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(null);
+                .get();
         Node rightmostNode = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
-                .orElse(null);
+                .get();
 
         List<Point> leftSideSet = new ArrayList<>();
         List<Point> rightSideSet = new ArrayList<>();

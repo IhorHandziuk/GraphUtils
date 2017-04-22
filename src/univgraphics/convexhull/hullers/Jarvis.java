@@ -22,12 +22,12 @@ public class Jarvis extends Huller {
     @Override
     public List<Point> getRegion() {
         if (graph.size() < 3) return null;
-
+        final int arbitraryNumber = 100; // should be larger than pi
         List<Edge> bounds = new ArrayList<>();
         Node minXPoint = Collections.min(graph, Comparator.comparingInt(Point::getY));
         Node pointOnHull = minXPoint;
-        Node leftPoint = new Node(pointOnHull.getX() - 100, pointOnHull.getY());
-        float minAngel = 3.15f; // larger than pi value
+        Node leftPoint = new Node(pointOnHull.getX() - arbitraryNumber, pointOnHull.getY());
+        float minAngel = arbitraryNumber;
         Node pointWithMinAngel = null;
         do {
             for (Node it : graph) {
@@ -40,7 +40,7 @@ public class Jarvis extends Huller {
             bounds.add(v);
             leftPoint = pointOnHull;
             pointOnHull = pointWithMinAngel;
-            minAngel = 3.15f;
+            minAngel = arbitraryNumber;
         } while (pointOnHull != minXPoint);
 
         return Huller.edgesToPoints(bounds);
@@ -52,8 +52,8 @@ public class Jarvis extends Huller {
         return (float)Math.acos(scalarProduct(vecF, vecS));
     }
 
-    // this function represents Edges as a Vectors, so should not
-    // be moved inside Edge class since they are't same entity
+    // this function represents Edges as Vectors,
+    // so should not be moved inside Edge class
     private static float scalarProduct(Edge e1, Edge e2) {
         float e1X = e1.getEnd().getX() - e1.getStart().getX();
         float e1Y = e1.getEnd().getY() - e1.getStart().getY();
