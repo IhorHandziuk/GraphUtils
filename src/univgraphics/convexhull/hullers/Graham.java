@@ -26,7 +26,12 @@ public class Graham extends Huller {
                 .stream()
                 .min(Comparator.comparingInt(Point::getY))
                 .orElse(null);
-        graph.sort((o1, o2) -> (int) (polarAngle(lowestNode, o2) - polarAngle(lowestNode, o1)));
+        graph.sort((o1, o2) -> {
+            if (o1.equals(lowestNode)) return Integer.MIN_VALUE;
+            if (o2.equals(lowestNode)) return Integer.MAX_VALUE;
+            boolean onTheRight = (new Edge(o1, o2)).pointIsOnRightSide(lowestNode);
+            return onTheRight ? 1 : -1;
+        });
         Stack<Point> convexHull = new Stack<>();
         Point nextToPeek = graph.get(0);
         convexHull.push(nextToPeek);
@@ -37,18 +42,10 @@ public class Graham extends Huller {
                 nextToPeek = convexHull.get(convexHull.size() - 2);
             }
             convexHull.push(graph.get(i));
+            nextToPeek = convexHull.get(convexHull.size() - 2);
         }
         List<Point> res = new ArrayList<>();
         res.addAll(convexHull);
         return res;
-    }
-
-    private double polarAngle(Point from, Point to) {
-        if (from.equals(to)) return -100000000;
-        double atan = Math.atan2((to.getY() - from.getY()), (to.getX() - from.getX()));
-//        if (atan < 0) {
-//            atan = 2 * Math.PI + atan;
-//        }
-        return atan;
     }
 }
