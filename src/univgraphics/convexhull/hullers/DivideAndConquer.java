@@ -1,7 +1,6 @@
 package univgraphics.convexhull.hullers;
 
 import univgraphics.common.*;
-import univgraphics.common.primitives.Edge;
 import univgraphics.common.primitives.Node;
 import univgraphics.common.primitives.Point;
 import univgraphics.geomsearch.localizators.Localizator;
@@ -9,7 +8,6 @@ import univgraphics.geomsearch.localizators.SimpleLocalizator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Ihor Handziuk on 13.04.2017.
@@ -61,8 +59,8 @@ public class DivideAndConquer extends Huller {
         Point innerPoint = new Point(innerPointX, innerPointY);
         Localizator simpleLocalizator = new SimpleLocalizator(second, innerPoint);
         if (simpleLocalizator.getRegion() == null) {
-            Node left = getSupportingLinePoint(innerPoint, second, true);
-            Node right = getSupportingLinePoint(innerPoint, second, false);
+            Node left = getSupportingLineNode(innerPoint, second, true);
+            Node right = getSupportingLineNode(innerPoint, second, false);
             removeChainBetween(left, right, second);
         }
         List<Node> unitedList = new ArrayList<>();
@@ -71,31 +69,5 @@ public class DivideAndConquer extends Huller {
         return (new Graham(unitedList)).getRegion();
     }
 
-    private static void removeChainBetween(Node left, Node right, List<Node> nodes) {
-        List<Node> toRemove = nodes
-                .stream()
-                .filter(x -> new Edge(left, right).pointIsOnRightSide(x))
-                .collect(Collectors.toList());
-        for (Node node : toRemove) {
-            nodes.remove(node);
-        }
-    }
 
-    private static Node getSupportingLinePoint(Point origin, List<Node> nodes, boolean left) {
-        int currIndex = 0;
-        Node res = nodes.get(currIndex);
-        for (int i = 0; i < nodes.size();) {
-            if (nodes.get(i).equals(res)) {
-                i++;
-            } else if (left != new Edge(origin, res).pointIsOnRightSide(nodes.get(i))) {
-                // if left == true then pointIsOnRightSide should be true and vise versa
-                currIndex++;
-                res = nodes.get(currIndex);
-                i = 0;
-            } else {
-                i++;
-            }
-        }
-        return res;
-    }
 }

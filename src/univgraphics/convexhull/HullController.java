@@ -8,10 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import univgraphics.common.GraphController;
 import univgraphics.common.generators.PointGenerator;
-import univgraphics.convexhull.hullers.DivideAndConquer;
-import univgraphics.convexhull.hullers.Graham;
-import univgraphics.convexhull.hullers.QuickHull;
-import univgraphics.convexhull.hullers.SimplePolygonHull;
+import univgraphics.convexhull.hullers.*;
 import univgraphics.common.generators.SimpleGenerator;
 
 public class HullController extends GraphController{
@@ -90,6 +87,6 @@ public class HullController extends GraphController{
         if (graph == null) return;
         gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
         drawGraph();
-        drawRegion((new Graham(graph)).getRegion());
+        drawRegion((new Preparata(graph)).getRegion());
     }
 }
