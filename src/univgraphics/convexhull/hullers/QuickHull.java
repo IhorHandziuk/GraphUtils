@@ -21,20 +21,20 @@ public class QuickHull extends Huller {
         if (graph.size() < 3) return null;
 
         List<Point> convexHull = new ArrayList<>();
-        Node leftMostNode = graph
+        Node leftmostNode = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
                 .orElse(null);
-        Node rightMostNode = graph
+        Node rightmostNode = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
                 .orElse(null);
 
         List<Point> leftSideSet = new ArrayList<>();
         List<Point> rightSideSet = new ArrayList<>();
-        Edge pivotEdge = new Edge(leftMostNode, rightMostNode);
-        graph.remove(leftMostNode);
-        graph.remove(rightMostNode);
+        Edge pivotEdge = new Edge(leftmostNode, rightmostNode);
+        graph.remove(leftmostNode);
+        graph.remove(rightmostNode);
         for (Node p : graph) {
             if (pivotEdge.pointIsOnRightSide(p)) {
                 rightSideSet.add(p);
@@ -42,12 +42,12 @@ public class QuickHull extends Huller {
                 leftSideSet.add(p);
             }
         }
-        graph.add(leftMostNode);
-        graph.add(rightMostNode);
-        convexHull.add(leftMostNode);
-        convexHull.addAll(quickHull(leftMostNode, rightMostNode, rightSideSet));
-        convexHull.add(rightMostNode);
-        convexHull.addAll(quickHull(rightMostNode, leftMostNode, leftSideSet));
+        graph.add(leftmostNode);
+        graph.add(rightmostNode);
+        convexHull.add(leftmostNode);
+        convexHull.addAll(quickHull(leftmostNode, rightmostNode, rightSideSet));
+        convexHull.add(rightmostNode);
+        convexHull.addAll(quickHull(rightmostNode, leftmostNode, leftSideSet));
 
         return convexHull;
     }

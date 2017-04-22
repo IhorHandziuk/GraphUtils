@@ -16,15 +16,15 @@ import java.util.Stack;
  */
 public class SimplePolygonHull extends Huller {
 
-    private Node leftmostXNode, rightmostXNode;
+    private Node leftmostNode, rightmostNode;
 
     public SimplePolygonHull(List<Node> graph) {
         super(graph);
-        leftmostXNode = graph
+        leftmostNode = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
                 .orElse(graph.get(0));
-        rightmostXNode = graph
+        rightmostNode = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
                 .orElse(graph.get(0));
@@ -36,7 +36,7 @@ public class SimplePolygonHull extends Huller {
 
         List<Node> upperChain = new ArrayList<>();
         List<Node> lowerChain = new ArrayList<>();
-        Edge dividingEdge = new Edge(leftmostXNode, rightmostXNode);
+        Edge dividingEdge = new Edge(leftmostNode, rightmostNode);
         for (Node node : graph) {
             if (dividingEdge.pointIsOnRightSide(node)) {
                 lowerChain.add(node);
@@ -66,10 +66,10 @@ public class SimplePolygonHull extends Huller {
         halfHull.push(prevNode);
         halfHull.push(currNode);
         //int nextPointIndex
-        while (nextNode != rightmostXNode) {
+        while (nextNode != rightmostNode) {
             Edge checkRightTurn = new Edge(prevNode, nextNode);
             if (!checkRightTurn.pointIsOnRightSide(currNode)) {
-                Edge checkLastPoint = new Edge(currNode, rightmostXNode);
+                Edge checkLastPoint = new Edge(currNode, rightmostNode);
                 if (checkLastPoint.pointIsOnRightSide(nextNode)) {
                     halfHull.push(nextNode);
 
