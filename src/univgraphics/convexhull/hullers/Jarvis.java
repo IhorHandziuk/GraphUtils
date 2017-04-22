@@ -22,12 +22,12 @@ public class Jarvis extends Huller {
     @Override
     public List<Point> getRegion() {
         if (graph.size() < 3) return null;
-        final int arbitraryNumber = 100; // should be larger than pi
+
         List<Edge> bounds = new ArrayList<>();
         Node minXPoint = Collections.min(graph, Comparator.comparingInt(Point::getY));
         Node pointOnHull = minXPoint;
-        Node leftPoint = new Node(pointOnHull.getX() - arbitraryNumber, pointOnHull.getY());
-        float minAngel = arbitraryNumber;
+        Node leftPoint = new Node(pointOnHull.getX() - 100, pointOnHull.getY());
+        float minAngel = 3.15f; // larger than pi value
         Node pointWithMinAngel = null;
         do {
             for (Node it : graph) {
@@ -40,7 +40,7 @@ public class Jarvis extends Huller {
             bounds.add(v);
             leftPoint = pointOnHull;
             pointOnHull = pointWithMinAngel;
-            minAngel = arbitraryNumber;
+            minAngel = 3.15f;
         } while (pointOnHull != minXPoint);
 
         return Huller.edgesToPoints(bounds);

@@ -1,5 +1,7 @@
 package univgraphics.common.primitives;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +13,7 @@ public class Node extends Point {
         super(x, y);
     }
 
-    public Node(Point p) {
+    public Node(@NotNull Point p) {
         super(p.getX(), p.getY());
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by ihorhandziuk on 20.04.17.
+ * Created by Ihor Handziuk on 20.04.17.
  * All code is free to use and distribute.
  */
 public class Graham extends Huller {
