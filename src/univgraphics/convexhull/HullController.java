@@ -37,7 +37,6 @@ public class HullController extends GraphController{
     private Button quickHullBtn;
 
     private boolean isSimplePolygon = false;
-    private boolean hullIsDone = false;
 
     @FXML
     void onGeneratePointsBtnClicked(ActionEvent event) {
@@ -45,7 +44,6 @@ public class HullController extends GraphController{
                 (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
         generateAndDraw();
         isSimplePolygon = false;
-        hullIsDone = false;
     }
 
     @FXML
@@ -54,43 +52,44 @@ public class HullController extends GraphController{
                 (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
         generateAndDraw();
         isSimplePolygon = true;
-        hullIsDone = false;
     }
 
     @FXML
     void onQuickHullBtnClicked(ActionEvent event) {
-       // if (graph != null && !hullIsDone) {
-            drawRegion((new QuickHull(graph)).getRegion());
-            hullIsDone = true;
-       // }
+        if (graph == null) return;
+        gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+        drawGraph();
+        drawRegion((new QuickHull(graph)).getRegion());
     }
 
     @FXML
     void onDivideAndConquerBtnClicked(ActionEvent event) {
-       // if (graph != null && !hullIsDone) {
-            drawRegion((new DivideAndConquer(graph)).getRegion());
-            hullIsDone = true;
-       // }
+        if (graph == null) return;
+        gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+        drawGraph();
+        drawRegion((new DivideAndConquer(graph)).getRegion());
     }
 
     @FXML
     void onSimplePolygonHullBtnClicked(ActionEvent event) {
-        //if (graph != null && !hullIsDone) {
-            if (isSimplePolygon) {
-                drawRegion((new SimplePolygonHull(graph)).getRegion());
-                hullIsDone = true;
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                        "There is no simple polygon",
-                        ButtonType.OK);
-                alert.showAndWait();
-            }
-        //}
+        if (graph == null) return;
+        if (isSimplePolygon) {
+            gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+            drawGraph();
+            drawRegion((new SimplePolygonHull(graph)).getRegion());
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    "There is no simple polygon",
+                    ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     @FXML
     void onPreparataBtnClicked(ActionEvent event) {
+        if (graph == null) return;
+        gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
+        drawGraph();
         drawRegion((new Graham(graph)).getRegion());
-        hullIsDone = true;
     }
 }

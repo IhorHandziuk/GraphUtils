@@ -22,7 +22,7 @@ public abstract class Huller {
         this.graph = graph;
     }
 
-    public static List<Point> edgesToPoints(List<Edge> bounds) {
+    protected static List<Point> edgesToPoints(List<Edge> bounds) {
         if (bounds == null) return null;
         List<Point> hull = new ArrayList<>();
         for (int i = 0; i < bounds.size() - 1; i++) {
@@ -30,5 +30,27 @@ public abstract class Huller {
         }
         hull.add(Edge.getIntersectionPoint(bounds.get(0), bounds.get(bounds.size() - 1)));
         return hull;
+    }
+
+    /**
+     * @param points convex hull represented by list of points
+     * @return list of nodes (i. e. points are connected)
+     */
+    protected static List<Node> hullToNodes(List<Point> points) {
+        List<Node> res = new ArrayList<>();
+        for (Point point : points) {
+            res.add(new Node(point));
+        }
+        for (int i = 0; i < res.size() - 1; i++) {
+            Node curr = res.get(i);
+            Node next = res.get(i + 1);
+            curr.adj().add(next);
+            next.adj().add(curr);
+        }
+        Node first = res.get(0);
+        Node last = res.get(res.size() - 1);
+        first.adj().add(last);
+        last.adj().add(first);
+        return res;
     }
 }
