@@ -16,13 +16,13 @@ public class SimpleGenerator extends Generator{
     @Override
     public void generate() {
         graph.clear();
-        int edgeNum = 3 + (int) (Math.random() * 5);
+        int edgeNum = 4 + (int) (Math.random() * 4);
         Edge firstEdge = Edge.createRandomEdge(x0, y0, width, height);
         Node firstNode = firstEdge.getStartNode();
         Node lastNode = firstEdge.getEndNode();
         graph.add(firstNode);
         graph.add(lastNode);
-        for (int i = 1; i < edgeNum;) {
+        for (int i = 2; i < edgeNum;) {
             Edge nextEdge = Edge.createRandomEdge(x0, y0, width, height);
             Node edgeStart = nextEdge.getStartNode();
             Node edgeEnd = nextEdge.getEndNode();

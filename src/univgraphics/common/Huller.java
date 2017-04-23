@@ -6,6 +6,7 @@ import univgraphics.common.primitives.Node;
 import univgraphics.common.primitives.Point;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,12 +94,30 @@ public abstract class Huller {
         return res;
     }
 
+    /**
+     * Sorts simple polygon in order of clockwise circumvent
+     * starting from leftmost node
+     */
     protected static void sortPolygonByCircumvent(List<Node> polygon) {
         List<Node> res = new ArrayList<>();
-        Node prevNode = polygon.get(0).adj().iterator().next();
-        Node currNode = polygon.get(0);
+        Node leftmostNode = polygon
+                .stream()
+                .min(Comparator.comparingInt(Point::getX))
+                .orElse(polygon.get(0));
+        Node lowerLeftmostAdj = leftmostNode.adj() // guarantee clockwise circumvent
+                .stream()
+                .min((o1, o2) -> {
+                    // 30 is arbitrary (large enough to make difference more than 1)
+                    int rightToOrigin = leftmostNode.getX() + 30;
+                    double o1X = new Edge(leftmostNode, o1).valueInX(rightToOrigin);
+                    double o2X = new Edge(leftmostNode, o2).valueInX(rightToOrigin);
+                    return (int) (o1X - o2X);
+                }).get();
+        Node prevNode = lowerLeftmostAdj;
+        Node currNode = leftmostNode;
         Node nextNode = null;
-        while (nextNode != polygon.get(0)) {
+        res.add(leftmostNode);
+        while (nextNode != lowerLeftmostAdj) {
             final Node finalPrevNode = prevNode;
             nextNode = currNode.adj()
                     .stream()

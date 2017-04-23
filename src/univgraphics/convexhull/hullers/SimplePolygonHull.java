@@ -5,10 +5,7 @@ import univgraphics.common.primitives.Edge;
 import univgraphics.common.primitives.Node;
 import univgraphics.common.primitives.Point;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by Ihor Handziuk on 13.04.2017.
@@ -17,6 +14,7 @@ import java.util.Stack;
 public class SimplePolygonHull extends Huller {
 
     private Node leftmostNode, rightmostNode;
+    private final int largestX, largestY;
 
     public SimplePolygonHull(List<Node> graph) {
         super(graph);
@@ -28,73 +26,88 @@ public class SimplePolygonHull extends Huller {
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
                 .orElse(graph.get(0));
+        largestY = graph
+                .stream()
+                .max(Comparator.comparingInt(Point::getY))
+                .orElse(graph.get(0))
+                .getY();
+        largestX = rightmostNode.getX();
     }
 
     @Override
     public List<Point> getRegion() {
         if (graph.size() < 3) return null;
 
+        sortPolygonByCircumvent(graph);
         List<Node> upperChain = new ArrayList<>();
         List<Node> lowerChain = new ArrayList<>();
-        Edge dividingEdge = new Edge(leftmostNode, rightmostNode);
+        boolean upper = true;
         for (Node node : graph) {
-            if (dividingEdge.pointIsOnRightSide(node)) {
-                lowerChain.add(node);
-            } else {
+            if (upper) {
                 upperChain.add(node);
+            } else {
+                lowerChain.add(node);
+            }
+            if (node == rightmostNode) {
+                upper = false;
             }
         }
-        upperChain.sort(Comparator.comparingInt(Point::getX));
-        lowerChain.sort(Comparator.comparingInt(Point::getX));
-
-        Stack<Point> upperPart = getChainHull(upperChain);
-        //Stack<Point> lowerPart = getChainHull(lowerChain);
 
         List<Point> convexHull = new ArrayList<>();
+        Stack<Point> upperPart = getChainHull(upperChain);
         convexHull.addAll(upperPart);
-        //convexHull.addAll(lowerPart);
+
+        lowerChain.add(0, rightmostNode);
+        lowerChain.add(leftmostNode);
+
+        flipNodesInChain(lowerChain);
+        Stack<Point> lowerPart = getChainHull(lowerChain);
+        // flip dummy node coordinates
+        lowerPart.get(0).setY(largestY - lowerPart.get(0).getY());
+        lowerPart.get(0).setX(largestX - lowerPart.get(0).getX());
+        flipNodesInChain(lowerChain);
+
+        convexHull.addAll(lowerPart);
         return convexHull;
     }
 
-    private Stack<Point> getChainHull(List<Node> chain) {
-        Node first = chain.get(0);
-        Node prevNode = new Node(first.getX(), first.getY() - 2); // 2 is arbitrary number
-        Node currNode = first;
-        Node nextNode = chain.get(1);
-
-        Stack<Point> halfHull = new Stack<>();
-        halfHull.push(prevNode);
-        halfHull.push(currNode);
-        //int nextPointIndex
-        while (nextNode != rightmostNode) {
-            Edge checkRightTurn = new Edge(prevNode, nextNode);
-            if (!checkRightTurn.pointIsOnRightSide(currNode)) {
-                Edge checkLastPoint = new Edge(currNode, rightmostNode);
-                if (checkLastPoint.pointIsOnRightSide(nextNode)) {
-                    halfHull.push(nextNode);
-
-                } else {
-                    // delete curr
-                }
-                //prevNode = currNode;
-            } else {
-                // delete stack top
-            }
-
-            Node finalPrevNode = prevNode;
-            nextNode = currNode.adj()
-                    .stream()
-                    .filter(x -> x != finalPrevNode)
-                    .findFirst()
-                    .orElse(null); // never got
-            if ((new Edge(prevNode, nextNode)).pointIsOnRightSide(currNode)) {
-                prevNode = currNode;
-            } else {
-                halfHull.remove(currNode);
-            }
-            currNode = nextNode;
-            halfHull.add(nextNode);
+    private void flipNodesInChain(List<Node> chain) {
+        for (Node node : chain) {
+            node.setY(largestY - node.getY());
+            node.setX(largestX - node.getX());
         }
-        return halfHull;
+        Node temp = leftmostNode;
+        leftmostNode = rightmostNode;
+        rightmostNode = temp;
+    }
+
+    private Stack<Point> getChainHull(List<Node> chain) {
+        Stack<Node> halfHull = new Stack<>();
+        Node first = chain.get(0);
+
+        // 4 is arbitrary number
+        Node dummyNode = new Node(first.getX(), first.getY() - 4);
+        Node nextToPeek;
+        halfHull.push(dummyNode);
+        halfHull.push(first);
+
+        for (int i = 1; i < chain.size();) {
+            nextToPeek = halfHull.get(halfHull.size() - 2);
+            Node currNode = chain.get(i);
+
+            Edge checkRightTurn = new Edge(nextToPeek, currNode);
+            if (!checkRightTurn.pointIsOnRightSide(halfHull.peek())) {
+                Edge checkLastPoint = new Edge(rightmostNode, halfHull.peek());
+                if (checkLastPoint.pointIsOnRightSide(currNode) || currNode.equals(rightmostNode)) {
+                    halfHull.push(currNode);
+                }
+                i++;
+            } else {
+                halfHull.pop();
+            }
+        }
+        Stack<Point> res = new Stack<>();
+        res.addAll(halfHull);
+        return res;
     }
 }
