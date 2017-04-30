@@ -55,10 +55,17 @@ public class QuickHull extends Huller {
     private List<Point> quickHull(Point start, Point end, List<Point> points) {
         if (points.isEmpty()) return points;
         Edge e = new Edge(start, end);
-        Point mostFar = points
-                .stream()
-                .max((o1, o2) -> (int)(e.distance(o1) - e.distance(o2)))
-                .orElse(points.iterator().next());
+        Point mostFar = points.iterator().next();
+
+        for (Point point : points) {
+            if (e.distance(point) > e.distance(mostFar)) {
+                mostFar = point;
+            } else if (e.distance(point) == e.distance(mostFar)) {
+                if (point.getX() < mostFar.getX()) {
+                    mostFar = point;
+                }
+            }
+        }
         Edge startToFar = new Edge(start, mostFar);
         Edge farToEnd = new Edge(mostFar, end);
         List<Point> startToFarRight = new ArrayList<>();

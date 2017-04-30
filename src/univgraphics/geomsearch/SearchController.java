@@ -121,7 +121,7 @@ public class SearchController extends GraphController {
         }
     }
 
-    protected void locate(Localizator localizator) {
+    private void locate(Localizator localizator) {
         if (graph != null && pointToLocate != null) {
             gc.clearRect(0, 0, (int)drawCanvas.getWidth(), (int)drawCanvas.getHeight());
             drawGraph();

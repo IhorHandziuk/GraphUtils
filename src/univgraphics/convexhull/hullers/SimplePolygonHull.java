@@ -32,13 +32,13 @@ public class SimplePolygonHull extends Huller {
                 .orElse(graph.get(0))
                 .getY();
         largestX = rightmostNode.getX();
+        sortPolygonByCircumvent(graph);
     }
 
     @Override
     public List<Point> getRegion() {
         if (graph.size() < 3) return null;
 
-        sortPolygonByCircumvent(graph);
         List<Node> upperChain = new ArrayList<>();
         List<Node> lowerChain = new ArrayList<>();
         boolean upper = true;
