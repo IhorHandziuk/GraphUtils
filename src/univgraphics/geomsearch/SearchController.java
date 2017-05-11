@@ -39,7 +39,7 @@ public class SearchController extends GraphController {
     private Point pointToLocate;
     private boolean graphIsSimplePolygon = false;
 
-    // for 3d lab
+    // for RegionTree
     private RegionTree regionTree;
     private Point startCorner, endCorner;
     private boolean isRightButtonPressed = false;

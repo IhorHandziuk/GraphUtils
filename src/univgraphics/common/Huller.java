@@ -103,7 +103,7 @@ public abstract class Huller {
         Node leftmostNode = polygon
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(polygon.get(0));
+                .get();
         Node lowerLeftmostAdj = leftmostNode.adj() // guarantee clockwise circumvent
                 .stream()
                 .min((o1, o2) -> {

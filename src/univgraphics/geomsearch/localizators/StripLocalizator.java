@@ -20,12 +20,12 @@ public class StripLocalizator extends Localizator {
         leftmostX = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0))
+                .get()
                 .getX();
         rightmostX = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0))
+                .get()
                 .getX();
     }
 

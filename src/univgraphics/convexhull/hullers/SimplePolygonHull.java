@@ -21,15 +21,15 @@ public class SimplePolygonHull extends Huller {
         leftmostNode = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0));
+                .get();
         rightmostNode = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0));
+                .get();
         largestY = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getY))
-                .orElse(graph.get(0))
+                .get()
                 .getY();
         largestX = rightmostNode.getX();
         sortPolygonByCircumvent(graph);

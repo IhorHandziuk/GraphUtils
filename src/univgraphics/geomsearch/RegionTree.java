@@ -33,12 +33,12 @@ public class RegionTree {
         root.xLeft = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0))
+                .get()
                 .getX();
         root.xRight = graph
                 .stream()
                 .max(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0))
+                .get()
                 .getX() + 1;  // + 1 for maintaining the rule [xLeft, xRight)
         buildTree(root);
     }

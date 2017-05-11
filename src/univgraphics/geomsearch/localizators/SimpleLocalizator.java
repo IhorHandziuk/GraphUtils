@@ -31,7 +31,7 @@ public class SimpleLocalizator extends Localizator {
                     .stream()
                     .filter(x -> x != finalPrevNode)
                     .findFirst()
-                    .orElse(null);
+                    .get();
             edges.add(new Edge(currNode, nextNode));
             prevNode = currNode;
             currNode = nextNode;
@@ -40,7 +40,7 @@ public class SimpleLocalizator extends Localizator {
         int leftmostX = graph
                 .stream()
                 .min(Comparator.comparingInt(Point::getX))
-                .orElse(graph.get(0))
+                .get()
                 .getX();
         Point farPoint = new Point(leftmostX - 1, pointToLocate.getY());
         Edge testEdge = new Edge(pointToLocate, farPoint);
